@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 def update_lotto_excel(file_path, output_path=None):
-    # 1. 엑셀 파일 불러오기
+    # 1. 엑셀 파일 불러오기()
     print(f"'{file_path}' 파일을 읽어오는 중입니다...")
     df = pd.read_excel(file_path)
 
