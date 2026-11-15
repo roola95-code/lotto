@@ -1,0 +1,20 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller / Distribution / Build
+build/
+dist/
+*.spec.bak
+
+# Temporary / Scratch
+scratch/
+새 폴더/
+input.txt
+
+# Editor / OS
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

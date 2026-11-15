@@ -47,20 +47,20 @@ def load_data(file_path, past_weeks):
         else:
             df = pd.read_excel(file_path)
             
-        # ★ [수정된 부분] 최신 회차가 맨 위에 있다면 오름차순(과거->최신)으로 정렬
+        # ★ 최신 회차가 맨 위에 있다면 오름차순(과거->최신)으로 정렬
         if '회차' in df.columns and df['회차'].iloc[0] > df['회차'].iloc[-1]:
             df = df.sort_values(by='회차', ascending=True)
             
-        # 숫자형 데이터만 추출
-        df_numeric = df.select_dtypes(include=[np.number])
+        # ★ [수정된 부분] 마지막 6개 열이 아니라, 명확하게 칼럼 이름으로 추출합니다.
+        num_cols = ['번호1', '번호2', '번호3', '번호4', '번호5', '번호6']
         
-        # 마지막 6개 열이 로또 번호라고 가정 (보너스 번호 제외)
-        if df_numeric.shape[1] < 6:
-            print("엑셀 파일에 숫자 데이터 열이 6개 이상 필요합니다.")
+        # 엑셀에 해당 칼럼이 모두 존재하는지 체크
+        if not all(col in df.columns for col in num_cols):
+            print("엑셀 파일에 '번호1' ~ '번호6' 칼럼이 명확하게 존재해야 합니다.")
             sys.exit(1)
             
-        cols = df_numeric.columns[-6:]
-        data = df_numeric[cols].values
+        # 지정한 6개 당첨번호 칼럼 데이터만 안전하게 추출
+        data = df[num_cols].values
         
         # 유효한 로또 번호(1~45)만 필터링
         valid_data = []
@@ -91,7 +91,6 @@ def load_data(file_path, past_weeks):
         round_info = None
         if has_round and len(valid_rounds) > 0:
             final_rounds = valid_rounds[-actual_weeks:]
-            # 사용자가 요청한 양식: "1212회 ~ 1208회" 와 같이 큰 값이 먼저 오도록 정렬하기 위해 max, min 추출
             max_round = max(final_rounds[0], final_rounds[-1])
             min_round = min(final_rounds[0], final_rounds[-1])
             round_info = (max_round, min_round)
